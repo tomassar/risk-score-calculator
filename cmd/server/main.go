@@ -9,10 +9,10 @@ import (
 	"syscall"
 	"time"
 
-	"credit-score-evaluator/internal/config"
-	"credit-score-evaluator/internal/handlers"
-	"credit-score-evaluator/internal/services"
-	"credit-score-evaluator/internal/storage"
+	"github.com/tomassar/credit-score-evaluator/internal/config"
+	"github.com/tomassar/credit-score-evaluator/internal/handlers"
+	"github.com/tomassar/credit-score-evaluator/internal/services"
+	"github.com/tomassar/credit-score-evaluator/internal/storage"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"

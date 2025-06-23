@@ -1,0 +1,41 @@
+# Ignore git and version control
+.git
+.gitignore
+.gitattributes
+
+# Ignore documentation
+README.md
+deployment.md
+*.md
+
+# Ignore build artifacts
+bin/
+server
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Ignore data and temporary files
+data/
+*.tmp
+*.log
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore test files
+*_test.go
+testdata/
+
+# Docker files (not needed in build context when using docker-compose)
+Dockerfile
+docker-compose.yml
+.dockerignore 
