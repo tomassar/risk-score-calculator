@@ -1,6 +1,10 @@
-FROM golang:1.21-alpine AS builder
+FROM golang:1.23 AS builder
 
-RUN apk add --no-cache gcc musl-dev sqlite-dev
+RUN apt-get update && apt-get install -y \
+    gcc \
+    sqlite3 \
+    libsqlite3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -13,11 +17,15 @@ RUN go install github.com/a-h/templ/cmd/templ@latest
 
 RUN templ generate
 
-RUN CGO_ENABLED=1 GOOS=linux go build -a -installsuffix cgo -o main cmd/server/main.go
+RUN CGO_ENABLED=1 go build -o main cmd/server/main.go
 
-FROM alpine:latest
+FROM ubuntu:22.04
 
-RUN apk --no-cache add ca-certificates sqlite
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    sqlite3 \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root/
 
