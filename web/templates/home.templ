@@ -1,0 +1,403 @@
+package templates
+
+import "fmt"
+
+type HomeData struct {
+	BorrowerCount   int
+	ActiveRuleCount int
+	TotalRuleCount  int
+	FlashMessages   []map[string]string
+}
+
+templ HomePage(data HomeData) {
+	@Base("Dashboard", HomeContent(data))
+}
+
+templ HomeContent(data HomeData) {
+	<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+		<!-- Flash Messages -->
+		if len(data.FlashMessages) > 0 {
+			for _, flash := range data.FlashMessages {
+				<div class={ "rounded-md p-4 mb-4", flashClass(flash["type"]) }>
+					<div class="flex">
+						<div class="flex-shrink-0">
+							@flashIcon(flash["type"])
+						</div>
+						<div class="ml-3">
+							<p class={ "text-sm font-medium", flashTextClass(flash["type"]) }>
+								{ flash["message"] }
+							</p>
+						</div>
+					</div>
+				</div>
+			}
+		}
+
+		<!-- Page Header -->
+		<div class="md:flex md:items-center md:justify-between mb-8">
+			<div class="flex-1 min-w-0">
+				<h2 class="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:text-3xl sm:truncate">
+					Risk Score Dashboard
+				</h2>
+				<p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+					Overview of your lending risk assessment system
+				</p>
+			</div>
+		</div>
+
+		<!-- Stats Cards -->
+		<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+			<!-- Borrowers Card -->
+			<div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+				<div class="p-5">
+					<div class="flex items-center">
+						<div class="flex-shrink-0">
+							<div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+								<svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+								</svg>
+							</div>
+						</div>
+						<div class="ml-5 w-0 flex-1">
+							<dl>
+								<dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+									Total Borrowers
+								</dt>
+								<dd class="text-lg font-medium text-gray-900 dark:text-white">
+									{ fmt.Sprintf("%d", data.BorrowerCount) }
+								</dd>
+							</dl>
+						</div>
+					</div>
+				</div>
+				<div class="bg-gray-50 dark:bg-gray-700 px-5 py-3">
+					<div class="text-sm">
+						<a href="/borrowers" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500">
+							View all borrowers
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- Active Rules Card -->
+			<div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+				<div class="p-5">
+					<div class="flex items-center">
+						<div class="flex-shrink-0">
+							<div class="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
+								<svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+								</svg>
+							</div>
+						</div>
+						<div class="ml-5 w-0 flex-1">
+							<dl>
+								<dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+									Active Rules
+								</dt>
+								<dd class="text-lg font-medium text-gray-900 dark:text-white">
+									{ fmt.Sprintf("%d", data.ActiveRuleCount) }
+								</dd>
+							</dl>
+						</div>
+					</div>
+				</div>
+				<div class="bg-gray-50 dark:bg-gray-700 px-5 py-3">
+					<div class="text-sm">
+						<a href="/rules" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500">
+							Manage rules
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- Total Rules Card -->
+			<div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+				<div class="p-5">
+					<div class="flex items-center">
+						<div class="flex-shrink-0">
+							<div class="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+								<svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+								</svg>
+							</div>
+						</div>
+						<div class="ml-5 w-0 flex-1">
+							<dl>
+								<dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+									Total Rules
+								</dt>
+								<dd class="text-lg font-medium text-gray-900 dark:text-white">
+									{ fmt.Sprintf("%d", data.TotalRuleCount) }
+								</dd>
+							</dl>
+						</div>
+					</div>
+				</div>
+				<div class="bg-gray-50 dark:bg-gray-700 px-5 py-3">
+					<div class="text-sm">
+						<a href="/rules" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500">
+							View all rules
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Quick Actions -->
+		<div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+			<div class="px-4 py-5 sm:p-6">
+				<h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4">
+					Quick Actions
+				</h3>
+				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+					<a href="/upload" class="relative group bg-white dark:bg-gray-700 p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-500 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 transition-colors">
+						<div>
+							<span class="rounded-lg inline-flex p-3 bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-400 group-hover:bg-blue-100 dark:group-hover:bg-blue-800">
+								<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+								</svg>
+							</span>
+						</div>
+						<div class="mt-4">
+							<h3 class="text-lg font-medium text-gray-900 dark:text-white">
+								Upload Data
+							</h3>
+							<p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+								Upload CSV files with borrower information
+							</p>
+						</div>
+					</a>
+
+					<a href="/borrowers" class="relative group bg-white dark:bg-gray-700 p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-500 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 transition-colors">
+						<div>
+							<span class="rounded-lg inline-flex p-3 bg-green-50 dark:bg-green-900 text-green-600 dark:text-green-400 group-hover:bg-green-100 dark:group-hover:bg-green-800">
+								<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 00-2-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+								</svg>
+							</span>
+						</div>
+						<div class="mt-4">
+							<h3 class="text-lg font-medium text-gray-900 dark:text-white">
+								View Scores
+							</h3>
+							<p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+								Review calculated risk scores
+							</p>
+						</div>
+					</a>
+
+					<a href="/rules" class="relative group bg-white dark:bg-gray-700 p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-500 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 transition-colors">
+						<div>
+							<span class="rounded-lg inline-flex p-3 bg-purple-50 dark:bg-purple-900 text-purple-600 dark:text-purple-400 group-hover:bg-purple-100 dark:group-hover:bg-purple-800">
+								<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+								</svg>
+							</span>
+						</div>
+						<div class="mt-4">
+							<h3 class="text-lg font-medium text-gray-900 dark:text-white">
+								Configure Rules
+							</h3>
+							<p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+								Set up and manage scoring rules
+							</p>
+						</div>
+					</a>
+
+					<button
+						hx-post="/htmx/recalculate"
+						hx-trigger="click"
+						hx-target="#flash-messages"
+						hx-swap="afterbegin"
+						class="relative group bg-white dark:bg-gray-700 p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-500 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 transition-colors text-left"
+					>
+						<div>
+							<span class="rounded-lg inline-flex p-3 bg-orange-50 dark:bg-orange-900 text-orange-600 dark:text-orange-400 group-hover:bg-orange-100 dark:group-hover:bg-orange-800">
+								<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+								</svg>
+							</span>
+						</div>
+						<div class="mt-4">
+							<h3 class="text-lg font-medium text-gray-900 dark:text-white">
+								Recalculate Scores
+							</h3>
+							<p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+								Refresh all risk score calculations
+							</p>
+						</div>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+func flashClass(msgType string) string {
+	switch msgType {
+	case "success":
+		return "bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700"
+	case "error":
+		return "bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700"
+	case "warning":
+		return "bg-yellow-50 dark:bg-yellow-900 border border-yellow-200 dark:border-yellow-700"
+	default:
+		return "bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700"
+	}
+}
+
+func flashTextClass(msgType string) string {
+	switch msgType {
+	case "success":
+		return "text-green-800 dark:text-green-200"
+	case "error":
+		return "text-red-800 dark:text-red-200"
+	case "warning":
+		return "text-yellow-800 dark:text-yellow-200"
+	default:
+		return "text-blue-800 dark:text-blue-200"
+	}
+}
+
+templ flashIcon(msgType string) {
+	switch msgType {
+	case "success":
+		<svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+			<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+		</svg>
+	case "error":
+		<svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+			<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+		</svg>
+	case "warning":
+		<svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+			<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+		</svg>
+	default:
+		<svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+			<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+		</svg>
+	}
+}
+
+templ FlashMessage(msgType, message string) {
+	<div class={ "flash-message rounded-lg p-4 mb-2", flashClass(msgType) }>
+		<div class="flex items-center">
+			<div class="flex-shrink-0">
+				@flashIcon(msgType)
+			</div>
+			<div class="ml-3 flex-1">
+				<p class={ "text-sm font-medium", flashTextClass(msgType) }>{ message }</p>
+			</div>
+			<div class="ml-4 flex-shrink-0">
+				<button onclick="this.parentElement.parentElement.parentElement.remove()" class="inline-flex text-gray-400 hover:text-gray-600 focus:outline-none focus:text-gray-600 transition ease-in-out duration-150">
+					<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+						<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+					</svg>
+				</button>
+			</div>
+		</div>
+	</div>
+}
+
+templ DashboardStats(data struct{BorrowerCount int; ActiveRuleCount int; TotalRuleCount int}) {
+	<!-- Stats Cards -->
+	<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+		<!-- Borrowers Card -->
+		<div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+			<div class="p-5">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+							<svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+							</svg>
+						</div>
+					</div>
+					<div class="ml-5 w-0 flex-1">
+						<dl>
+							<dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+								Total Borrowers
+							</dt>
+							<dd class="text-lg font-medium text-gray-900 dark:text-white">
+								{ fmt.Sprintf("%d", data.BorrowerCount) }
+							</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+			<div class="bg-gray-50 dark:bg-gray-700 px-5 py-3">
+				<div class="text-sm">
+					<a href="/borrowers" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500">
+						View all borrowers
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Active Rules Card -->
+		<div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+			<div class="p-5">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<div class="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
+							<svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+							</svg>
+						</div>
+					</div>
+					<div class="ml-5 w-0 flex-1">
+						<dl>
+							<dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+								Active Rules
+							</dt>
+							<dd class="text-lg font-medium text-gray-900 dark:text-white">
+								{ fmt.Sprintf("%d", data.ActiveRuleCount) }
+							</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+			<div class="bg-gray-50 dark:bg-gray-700 px-5 py-3">
+				<div class="text-sm">
+					<a href="/rules" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500">
+						Manage rules
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Total Rules Card -->
+		<div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+			<div class="p-5">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<div class="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+							<svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+							</svg>
+						</div>
+					</div>
+					<div class="ml-5 w-0 flex-1">
+						<dl>
+							<dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+								Total Rules
+							</dt>
+							<dd class="text-lg font-medium text-gray-900 dark:text-white">
+								{ fmt.Sprintf("%d", data.TotalRuleCount) }
+							</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+			<div class="bg-gray-50 dark:bg-gray-700 px-5 py-3">
+				<div class="text-sm">
+					<a href="/rules" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500">
+						View all rules
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+} 

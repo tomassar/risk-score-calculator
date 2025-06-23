@@ -1,0 +1,199 @@
+package templates
+
+type UploadData struct {
+	FlashMessages []map[string]string
+}
+
+templ UploadPage(data UploadData) {
+	@Base("Upload Data", UploadContent(data))
+}
+
+templ UploadContent(data UploadData) {
+	<div class="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
+		<!-- Flash Messages -->
+		if len(data.FlashMessages) > 0 {
+			for _, flash := range data.FlashMessages {
+				<div class={ "rounded-md p-4 mb-4", flashClass(flash["type"]) }>
+					<div class="flex">
+						<div class="flex-shrink-0">
+							@flashIcon(flash["type"])
+						</div>
+						<div class="ml-3">
+							<p class={ "text-sm font-medium", flashTextClass(flash["type"]) }>
+								{ flash["message"] }
+							</p>
+						</div>
+					</div>
+				</div>
+			}
+		}
+
+		<!-- Page Header -->
+		<div class="mb-8">
+			<h1 class="text-3xl font-bold text-gray-900 dark:text-white">Upload Borrower Data</h1>
+			<p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+				Upload a CSV file containing borrower information to calculate risk scores.
+			</p>
+		</div>
+
+		<!-- Upload Form -->
+		<div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+			<div class="px-4 py-5 sm:p-6">
+				<div id="upload-form-container">
+					@UploadForm()
+				</div>
+			</div>
+		</div>
+
+		<!-- File Format Information -->
+		<div class="mt-8 bg-blue-50 dark:bg-blue-900 rounded-lg p-6">
+			<h3 class="text-lg font-medium text-blue-900 dark:text-blue-100 mb-4">
+				Required CSV Format
+			</h3>
+			<div class="text-sm text-blue-800 dark:text-blue-200">
+				<p class="mb-3">Your CSV file must include the following columns (in any order):</p>
+				<div class="grid grid-cols-2 gap-4 mb-4">
+					<div>
+						<h4 class="font-medium mb-2">Required Columns:</h4>
+						<ul class="space-y-1 text-xs">
+							<li>• <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">full_name</code></li>
+							<li>• <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">email</code></li>
+							<li>• <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">age</code></li>
+							<li>• <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">monthly_income</code></li>
+						</ul>
+					</div>
+					<div>
+						<h4 class="font-medium mb-2">Additional Columns:</h4>
+						<ul class="space-y-1 text-xs">
+							<li>• <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">employment_status</code></li>
+							<li>• <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">dependents</code></li>
+							<li>• <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">existing_loans</code></li>
+							<li>• <code class="bg-blue-100 dark:bg-blue-800 px-1 rounded">savings_balance</code></li>
+						</ul>
+					</div>
+				</div>
+				<div class="bg-blue-100 dark:bg-blue-800 rounded p-3 text-xs">
+					<p class="font-medium mb-1">Example CSV header:</p>
+					<code>full_name,email,age,monthly_income,employment_status,dependents,existing_loans,savings_balance</code>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+templ UploadForm() {
+	<form 
+		hx-post="/api/upload" 
+		hx-target="#upload-form-container"
+		hx-swap="outerHTML"
+		hx-encoding="multipart/form-data"
+		class="space-y-6"
+	>
+		<!-- File Upload -->
+		<div>
+			<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+				Choose CSV File
+			</label>
+			<div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
+				<div class="space-y-1 text-center">
+					<svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+						<path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					</svg>
+					<div class="flex text-sm text-gray-600 dark:text-gray-400">
+						<label for="csv_file" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+							<span>Upload a file</span>
+							<input id="csv_file" name="csv_file" type="file" accept=".csv" class="sr-only" required/>
+						</label>
+						<p class="pl-1">or drag and drop</p>
+					</div>
+					<p class="text-xs text-gray-500 dark:text-gray-400">
+						CSV files up to 10MB
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Options -->
+		<div class="space-y-4">
+			<div class="flex items-center">
+				<input id="replace" name="replace" type="checkbox" value="true" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded dark:bg-gray-700"/>
+				<label for="replace" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+					Replace existing data (clear all current borrowers first)
+				</label>
+			</div>
+		</div>
+
+		<!-- Submit Button -->
+		<div class="flex justify-end">
+			<button 
+				type="submit" 
+				class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+			>
+				<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+				</svg>
+				Upload File
+			</button>
+		</div>
+	</form>
+}
+
+templ UploadStatus(success bool, message, recordsLoaded string) {
+	<div class="space-y-6">
+		if success {
+			<div class="rounded-md bg-green-50 dark:bg-green-900 p-4">
+				<div class="flex">
+					<div class="flex-shrink-0">
+						<svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-3">
+						<h3 class="text-sm font-medium text-green-800 dark:text-green-200">
+							Upload Successful!
+						</h3>
+						<div class="mt-2 text-sm text-green-700 dark:text-green-300">
+							<p>{ message }</p>
+							if recordsLoaded != "" {
+								<p class="mt-1">Records processed: { recordsLoaded }</p>
+							}
+						</div>
+						<div class="mt-4">
+							<div class="-mx-2 -my-1.5 flex space-x-3">
+								<a href="/borrowers" class="bg-green-50 dark:bg-green-900 px-2 py-1.5 rounded-md text-sm font-medium text-green-800 dark:text-green-200 hover:bg-green-100 dark:hover:bg-green-800">
+									View Results
+								</a>
+								<button hx-get="/htmx/upload-form" hx-target="#upload-form-container" hx-swap="innerHTML" class="bg-green-50 dark:bg-green-900 px-2 py-1.5 rounded-md text-sm font-medium text-green-800 dark:text-green-200 hover:bg-green-100 dark:hover:bg-green-800">
+									Upload Another File
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		} else {
+			<div class="rounded-md bg-red-50 dark:bg-red-900 p-4">
+				<div class="flex">
+					<div class="flex-shrink-0">
+						<svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+						</svg>
+					</div>
+					<div class="ml-3">
+						<h3 class="text-sm font-medium text-red-800 dark:text-red-200">
+							Upload Failed
+						</h3>
+						<div class="mt-2 text-sm text-red-700 dark:text-red-300">
+							<p>{ message }</p>
+						</div>
+						<div class="mt-4">
+							<button hx-get="/htmx/upload-form" hx-target="#upload-form-container" hx-swap="innerHTML" class="bg-red-50 dark:bg-red-900 px-2 py-1.5 rounded-md text-sm font-medium text-red-800 dark:text-red-200 hover:bg-red-100 dark:hover:bg-red-800">
+								Try Again
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+} 

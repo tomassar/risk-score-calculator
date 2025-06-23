@@ -1,0 +1,28 @@
+full_name,email,age,monthly_income,employment_status,dependents,existing_loans,savings_balance
+John Smith,john.smith@email.com,32,75000,employed,2,25000,45000
+Sarah Johnson,sarah.johnson@email.com,28,95000,employed,1,15000,85000
+Michael Brown,michael.brown@email.com,45,120000,employed,3,50000,120000
+Emily Davis,emily.davis@email.com,26,35000,part-time,0,8000,12000
+Robert Wilson,robert.wilson@email.com,38,85000,employed,2,30000,65000
+Lisa Anderson,lisa.anderson@email.com,41,110000,self-employed,1,40000,95000
+David Taylor,david.taylor@email.com,29,45000,employed,0,12000,25000
+Jennifer Martinez,jennifer.martinez@email.com,34,68000,employed,2,20000,35000
+Christopher Lee,christopher.lee@email.com,52,150000,employed,4,80000,200000
+Amanda Garcia,amanda.garcia@email.com,25,25000,unemployed,1,5000,3000
+James Rodriguez,james.rodriguez@email.com,31,78000,employed,1,22000,48000
+Maria Hernandez,maria.hernandez@email.com,27,42000,employed,0,15000,18000
+William Lopez,william.lopez@email.com,43,98000,employed,3,35000,75000
+Jessica Gonzalez,jessica.gonzalez@email.com,30,55000,employed,1,18000,32000
+Daniel Perez,daniel.perez@email.com,36,72000,employed,2,28000,52000
+Ashley Turner,ashley.turner@email.com,24,38000,part-time,0,10000,8000
+Matthew White,matthew.white@email.com,39,88000,employed,2,32000,68000
+Michelle Harris,michelle.harris@email.com,33,62000,employed,1,20000,40000
+Kevin Clark,kevin.clark@email.com,47,125000,employed,3,55000,115000
+Laura Lewis,laura.lewis@email.com,29,48000,employed,0,14000,22000
+Steven Walker,steven.walker@email.com,35,71000,employed,2,25000,45000
+Nicole Hall,nicole.hall@email.com,26,41000,employed,0,12000,15000
+Ryan Allen,ryan.allen@email.com,40,92000,employed,2,38000,72000
+Kimberly Young,kimberly.young@email.com,28,53000,employed,1,16000,28000
+Mark King,mark.king@email.com,44,105000,employed,3,45000,88000 
+Tomás Sarmiento, t.sarmiento@email.com, 25, 0, unemployed, 3, 10000, 0
+Vicente Sarmiento, v.sarmiento@email.com, 19, 0, unemployed, 0, 10000, 0
